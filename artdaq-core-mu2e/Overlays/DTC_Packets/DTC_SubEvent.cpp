@@ -240,6 +240,8 @@ bool DTCLib::DTC_SubEvent::SetupSubEvent(optional_string accumulatedErrors)
 							  << std::flush;
 				}
 			}
+			// Cannot parse further — ptr and byte_count were not advanced
+			break;
 		}
 		catch (DTC_WrongPacketSizeException const &ex)
 		{
@@ -255,6 +257,8 @@ bool DTCLib::DTC_SubEvent::SetupSubEvent(optional_string accumulatedErrors)
 				TLOG(TLVL_ERROR) << testss.str();
 				TLOG(TLVL_ERROR) << header_.toJson();
 			}
+			// Cannot parse further — ptr and byte_count were not advanced
+			break;
 		}
 	}
 
