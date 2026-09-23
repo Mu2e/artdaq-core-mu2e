@@ -187,8 +187,8 @@ class STMFragment
 	{
 		if(!isRaw())
 			return true;
-		return data_[stm::RawHeader::ANCHOR_START] == stm::RawHeader::ANCHOR_WORD &&
-		       data_[stm::RawHeader::ANCHOR_END] == stm::RawHeader::ANCHOR_WORD;
+		return static_cast<uint16_t>(data_[stm::RawHeader::ANCHOR_START]) == stm::RawHeader::ANCHOR_WORD &&
+		       static_cast<uint16_t>(data_[stm::RawHeader::ANCHOR_END]) == stm::RawHeader::ANCHOR_WORD;
 	}
 
 	// -----------------------
