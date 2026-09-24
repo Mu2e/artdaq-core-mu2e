@@ -257,7 +257,13 @@ bool DTCLib::DTC_SubEvent::SetupSubEvent(optional_string accumulatedErrors)
 				TLOG(TLVL_ERROR) << testss.str();
 				TLOG(TLVL_ERROR) << header_.toJson();
 			}
-			// Cannot parse further — ptr and byte_count were not advanced
+			// Neither byte_count nor ptr advanced: the constructor threw before a block was
+			// added, so looping again would re-parse the same bytes forever (2026-09-22 bench:
+			// one bad ROC header produced 254k identical passes / 1.5 GB of log before the
+			// process was killed).  The remaining bytes of this subevent cannot be walked
+			// without a trustworthy header, so stop here and let the caller see IsCorrupt().
+			errSS << "\nCannot continue past a ROC header with a bad packet count; abandoning the rest of this SubEvent.";
+			TLOG(TLVL_ERROR) << errSS.str();
 			break;
 		}
 	}
