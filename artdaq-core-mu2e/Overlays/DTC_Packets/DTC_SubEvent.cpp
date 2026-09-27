@@ -236,7 +236,8 @@ bool DTCLib::DTC_SubEvent::SetupSubEvent(optional_string accumulatedErrors)
 							  << std::flush;
 				}
 			}
-			// Cannot parse further — ptr and byte_count were not advanced
+			// Stop parsing: the read position is not reliably past the failing block,
+			// so another pass of the loop would re-read the same bytes
 			break;
 		}
 		catch (DTC_WrongPacketSizeException const &ex)
@@ -253,7 +254,8 @@ bool DTCLib::DTC_SubEvent::SetupSubEvent(optional_string accumulatedErrors)
 				TLOG(TLVL_ERROR) << testss.str();
 				TLOG(TLVL_ERROR) << header_.toJson();
 			}
-			// Cannot parse further — ptr and byte_count were not advanced
+			// Stop parsing: the read position is not reliably past the failing block,
+			// so another pass of the loop would re-read the same bytes
 			break;
 		}
 	}
