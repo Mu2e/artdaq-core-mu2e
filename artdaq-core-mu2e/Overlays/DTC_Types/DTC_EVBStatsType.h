@@ -3,7 +3,7 @@
 
 #include <cstdint>  // uint8_t, uint16_t
 
-#define DTC_EVBStatsType_BRAM_TYPE_SIZE  5 /* 5-bits to handle stats from 32 DTCs */
+#define DTC_EVBStatsType_BRAM_TYPE_SIZE  5  /* 5-bits to handle stats from 32 DTCs */
 #define DTC_EVBStatsType_BRAM_TYPE_COUNT 10 /* 10 defined types enumerated below */
 
 namespace DTCLib
