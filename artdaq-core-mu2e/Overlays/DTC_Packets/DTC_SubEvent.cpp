@@ -240,6 +240,9 @@ bool DTCLib::DTC_SubEvent::SetupSubEvent(optional_string accumulatedErrors)
 							  << std::flush;
 				}
 			}
+			// Stop parsing: the read position is not reliably past the failing block,
+			// so another pass of the loop would re-read the same bytes
+			break;
 		}
 		catch (DTC_WrongPacketSizeException const &ex)
 		{
