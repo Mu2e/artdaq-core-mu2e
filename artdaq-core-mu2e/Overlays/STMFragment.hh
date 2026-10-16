@@ -115,6 +115,8 @@ class STMFragment
 	// RAW header access
 	// -----------------------
 
+	// TODO: remove prescale value helpers
+	// after updates in Offline/DAQ/src/STMPrintFragments_module.cc
 	uint16_t channel() const { return stm::RawHeader::channel(data_); }
 	uint64_t eventWindowTag() const { return stm::RawHeader::eventWindowTag(data_); }
 	uint64_t adcClock() const { return stm::RawHeader::adcClock(data_); }
@@ -123,7 +125,9 @@ class STMFragment
 	bool     subrunFlag() const { return stm::RawHeader::subrunFlag(data_); }
 	uint16_t rawLength() const { return stm::RawHeader::rawLength(data_); }
 	bool     rawPrescaled() const { return stm::RawHeader::rawPrescaled(data_); }
+	uint8_t  rawPrescaleValue() const { return 0; }
 	bool     zsPrescaled() const { return stm::RawHeader::zsPrescaled(data_); }
+	uint8_t  zsPrescaleValue() const { return 0; }
 	uint16_t zsRegions() const { return stm::RawHeader::zsRegions(data_); }
 	uint16_t zsLength() const { return stm::RawHeader::zsLength(data_); }
 	uint16_t phCount() const { return stm::RawHeader::phCount(data_); }
