@@ -23,9 +23,9 @@ CalorimeterDataDecoder::CalorimeterDataDecoder(DTCLib::DTC_SubEvent const& evt)
 }
 
 // Get Calo Hit Data Packet
-std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitDataPacket, std::vector<uint16_t>>>* mu2e::CalorimeterDataDecoder::GetCalorimeterHitData(size_t blockIndex) const
+std::unique_ptr<std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitDataPacket, std::vector<uint16_t>>>> mu2e::CalorimeterDataDecoder::GetCalorimeterHitData(size_t blockIndex) const
 {
-	std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitDataPacket, std::vector<uint16_t>>>* output = new std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitDataPacket, std::vector<uint16_t>>>();
+	auto output = std::make_unique<std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitDataPacket, std::vector<uint16_t>>>>();
 
 	// get data block at given index
 	DTCLib::DTC_DataBlock const* dataBlock = dataAtBlockIndex(blockIndex);
@@ -98,9 +98,9 @@ std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitDataPacket, st
 	return output;
 }
 
-std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitDataPacket, uint16_t>>* mu2e::CalorimeterDataDecoder::GetCalorimeterHitsForTrigger(size_t blockIndex) const
+std::unique_ptr<std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitDataPacket, uint16_t>>> mu2e::CalorimeterDataDecoder::GetCalorimeterHitsForTrigger(size_t blockIndex) const
 {
-	std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitDataPacket, uint16_t>>* output = new std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitDataPacket, uint16_t>>();
+	auto output = std::make_unique<std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitDataPacket, uint16_t>>>();
 
 	// get data block at given index
 	DTCLib::DTC_DataBlock const* dataBlock = dataAtBlockIndex(blockIndex);
@@ -162,9 +162,9 @@ std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitDataPacket, ui
 }
 
 // Get Calo Hit Test Data Packet
-std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitTestDataPacket, std::vector<uint16_t>>>* mu2e::CalorimeterDataDecoder::GetCalorimeterHitTestData(size_t blockIndex) const
+std::unique_ptr<std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitTestDataPacket, std::vector<uint16_t>>>> mu2e::CalorimeterDataDecoder::GetCalorimeterHitTestData(size_t blockIndex) const
 {
-	std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitTestDataPacket, std::vector<uint16_t>>>* output = new std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitTestDataPacket, std::vector<uint16_t>>>();
+	auto output = std::make_unique<std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitTestDataPacket, std::vector<uint16_t>>>>();
 
 	// get data block at given index
 	DTCLib::DTC_DataBlock const* dataBlock = dataAtBlockIndex(blockIndex);
@@ -274,9 +274,9 @@ std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitTestDataPacket
 }
 
 // Get Calo Hit Test Data Packet Fast
-std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitTestDataPacket, uint16_t>>* mu2e::CalorimeterDataDecoder::GetCalorimeterHitTestForTrigger(size_t blockIndex) const
+std::unique_ptr<std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitTestDataPacket, uint16_t>>> mu2e::CalorimeterDataDecoder::GetCalorimeterHitTestForTrigger(size_t blockIndex) const
 {
-	std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitTestDataPacket, uint16_t>>* output = new std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitTestDataPacket, uint16_t>>();
+	auto output = std::make_unique<std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitTestDataPacket, uint16_t>>>();
 
 	// get data block at given index
 	DTCLib::DTC_DataBlock const* dataBlock = dataAtBlockIndex(blockIndex);
@@ -380,9 +380,9 @@ std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterHitTestDataPacket
 }
 
 // Get Calo Counters Data Packet
-std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterCountersDataPacket, std::vector<uint32_t>>>* mu2e::CalorimeterDataDecoder::GetCalorimeterCountersData(size_t blockIndex) const
+std::unique_ptr<std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterCountersDataPacket, std::vector<uint32_t>>>> mu2e::CalorimeterDataDecoder::GetCalorimeterCountersData(size_t blockIndex) const
 {
-	std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterCountersDataPacket, std::vector<uint32_t>>>* output = new std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterCountersDataPacket, std::vector<uint32_t>>>();
+	auto output = std::make_unique<std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterCountersDataPacket, std::vector<uint32_t>>>>();
 
 	// get data block at given index
 	DTCLib::DTC_DataBlock const* dataBlock = dataAtBlockIndex(blockIndex);
@@ -423,9 +423,9 @@ std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterCountersDataPacke
 }
 
 // Get EmulatedROC Counters Data Packet
-std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterCountersDataPacket, std::vector<uint32_t>>>* mu2e::CalorimeterDataDecoder::GetEmulatedCountersData(size_t blockIndex) const
+std::unique_ptr<std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterCountersDataPacket, std::vector<uint32_t>>>> mu2e::CalorimeterDataDecoder::GetEmulatedCountersData(size_t blockIndex) const
 {
-	std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterCountersDataPacket, std::vector<uint32_t>>>* output = new std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterCountersDataPacket, std::vector<uint32_t>>>();
+	auto output = std::make_unique<std::vector<std::pair<mu2e::CalorimeterDataDecoder::CalorimeterCountersDataPacket, std::vector<uint32_t>>>>();
 
 	// get data block at given index
 	DTCLib::DTC_DataBlock const* dataBlock = dataAtBlockIndex(blockIndex);
