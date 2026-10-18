@@ -182,7 +182,7 @@ class CalorimeterDataDecoder : public DTCDataDecoder
 	std::unique_ptr<std::vector<std::pair<CalorimeterHitTestDataPacket, std::vector<uint16_t>>>>  GetCalorimeterHitTestData(size_t blockIndex) const;
 	std::unique_ptr<std::vector<std::pair<CalorimeterCountersDataPacket, std::vector<uint32_t>>>> GetCalorimeterCountersData(size_t blockIndex) const;
 	std::unique_ptr<std::vector<std::pair<CalorimeterCountersDataPacket, std::vector<uint32_t>>>> GetEmulatedCountersData(size_t blockIndex) const;
-	std::unique_ptr<CalorimeterFooterPacket>                                      GetCalorimeterFooter(size_t blockIndex) const;
+	std::unique_ptr<CalorimeterFooterPacket>                                                      GetCalorimeterFooter(size_t blockIndex) const;
 	std::unique_ptr<std::vector<std::pair<CalorimeterHitDataPacket, uint16_t>>>                   GetCalorimeterHitsForTrigger(size_t blockIndex) const;
 	std::unique_ptr<std::vector<std::pair<CalorimeterHitTestDataPacket, uint16_t>>>               GetCalorimeterHitTestForTrigger(size_t blockIndex) const;
 };
