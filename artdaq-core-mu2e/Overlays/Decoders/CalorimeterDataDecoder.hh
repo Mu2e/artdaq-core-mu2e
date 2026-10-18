@@ -4,6 +4,7 @@
 #include "artdaq-core-mu2e/Overlays/Decoders/DTCDataDecoder.hh"
 
 #include <messagefacility/MessageLogger/MessageLogger.h>  // Putting this here so that Offline/DAQ/src/FragmentAna_module.cc can use it
+#include <memory>
 
 namespace mu2e
 {
@@ -177,13 +178,13 @@ class CalorimeterDataDecoder : public DTCDataDecoder
 		    : numberOfCounters(0) {}
 	};
 
-	std::vector<std::pair<CalorimeterHitDataPacket, std::vector<uint16_t>>>*      GetCalorimeterHitData(size_t blockIndex) const;
-	std::vector<std::pair<CalorimeterHitTestDataPacket, std::vector<uint16_t>>>*  GetCalorimeterHitTestData(size_t blockIndex) const;
-	std::vector<std::pair<CalorimeterCountersDataPacket, std::vector<uint32_t>>>* GetCalorimeterCountersData(size_t blockIndex) const;
-	std::vector<std::pair<CalorimeterCountersDataPacket, std::vector<uint32_t>>>* GetEmulatedCountersData(size_t blockIndex) const;
+	std::unique_ptr<std::vector<std::pair<CalorimeterHitDataPacket, std::vector<uint16_t>>>>      GetCalorimeterHitData(size_t blockIndex) const;
+	std::unique_ptr<std::vector<std::pair<CalorimeterHitTestDataPacket, std::vector<uint16_t>>>>  GetCalorimeterHitTestData(size_t blockIndex) const;
+	std::unique_ptr<std::vector<std::pair<CalorimeterCountersDataPacket, std::vector<uint32_t>>>> GetCalorimeterCountersData(size_t blockIndex) const;
+	std::unique_ptr<std::vector<std::pair<CalorimeterCountersDataPacket, std::vector<uint32_t>>>> GetEmulatedCountersData(size_t blockIndex) const;
 	std::unique_ptr<CalorimeterFooterPacket>                                      GetCalorimeterFooter(size_t blockIndex) const;
-	std::vector<std::pair<CalorimeterHitDataPacket, uint16_t>>*                   GetCalorimeterHitsForTrigger(size_t blockIndex) const;
-	std::vector<std::pair<CalorimeterHitTestDataPacket, uint16_t>>*               GetCalorimeterHitTestForTrigger(size_t blockIndex) const;
+	std::unique_ptr<std::vector<std::pair<CalorimeterHitDataPacket, uint16_t>>>                   GetCalorimeterHitsForTrigger(size_t blockIndex) const;
+	std::unique_ptr<std::vector<std::pair<CalorimeterHitTestDataPacket, uint16_t>>>               GetCalorimeterHitTestForTrigger(size_t blockIndex) const;
 };
 
 using CalorimeterDataDecoders = std::vector<CalorimeterDataDecoder>;
