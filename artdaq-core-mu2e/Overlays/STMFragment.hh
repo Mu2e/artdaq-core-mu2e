@@ -151,12 +151,12 @@ class STMFragment
 	uint16_t phCount() const { return stm::RawHeader::phCount(data_); }
 
 	// Fields whose position or meaning differs between header versions.
-	bool     rawPrescaled() const { return legacy_ ? stm::RawHeaderLegacy::rawPrescaled(data_) : stm::RawHeader::rawPrescaled(data_); }
-	bool     zsPrescaled() const { return legacy_ ? stm::RawHeaderLegacy::zsPrescaled(data_) : stm::RawHeader::zsPrescaled(data_); }
-	uint8_t  rawPrescaleValue() const { return legacy_ ? stm::RawHeaderLegacy::rawPrescaleValue(data_) : 0; }
-	uint8_t  zsPrescaleValue() const { return legacy_ ? stm::RawHeaderLegacy::zsPrescaleValue(data_) : 0; }
-	bool     badData() const { return legacy_ ? stm::RawHeaderLegacy::badData(data_) : stm::RawHeader::badData(data_); }
-	bool     missing() const { return legacy_ ? stm::RawHeaderLegacy::missing(data_) : stm::RawHeader::missing(data_); }
+	bool    rawPrescaled() const { return legacy_ ? stm::RawHeaderLegacy::rawPrescaled(data_) : stm::RawHeader::rawPrescaled(data_); }
+	bool    zsPrescaled() const { return legacy_ ? stm::RawHeaderLegacy::zsPrescaled(data_) : stm::RawHeader::zsPrescaled(data_); }
+	uint8_t rawPrescaleValue() const { return legacy_ ? stm::RawHeaderLegacy::rawPrescaleValue(data_) : 0; }
+	uint8_t zsPrescaleValue() const { return legacy_ ? stm::RawHeaderLegacy::zsPrescaleValue(data_) : 0; }
+	bool    badData() const { return legacy_ ? stm::RawHeaderLegacy::badData(data_) : stm::RawHeader::badData(data_); }
+	bool    missing() const { return legacy_ ? stm::RawHeaderLegacy::missing(data_) : stm::RawHeader::missing(data_); }
 
 	// ----------------
 	// Full data (including header)

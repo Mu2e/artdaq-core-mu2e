@@ -63,7 +63,7 @@ struct RawHeader
 		EM_1       = 13,
 		EM_2_DRTDC = 14,
 
-		FLAGS      = 15,  // bit0 badData, bit1 missing, bit2 rawPrescaled, bit3 zsPrescaled, bits12-15 version
+		FLAGS      = 15, // bit0 badData, bit1 missing, bit2 rawPrescaled, bit3 zsPrescaled, bits12-15 version
 		RAW_LEN    = 16,
 		ZS_REGIONS = 17,
 		ZS_LEN     = 18,
