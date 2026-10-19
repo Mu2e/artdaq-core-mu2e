@@ -4,16 +4,17 @@
 #include "artdaq-core-mu2e/Overlays/STMHeaderLayout.hh"
 #include "artdaq-core/Data/Fragment.hh"
 
-namespace mu2e {
+namespace mu2e
+{
 
 class STMFragment
 {
-public:
+  public:
 	explicit STMFragment(artdaq::Fragment const& f)
-		: frag_(f)
-		, data_(reinterpret_cast<int16_t const*>(f.dataBegin()))
-		, version_(isRaw() ? stm::RawHeader::headerVersion(data_, dataWords()) : 0)
-		, legacy_(version_ == stm::RawHeader::VERSION_LEGACY)
+	    : frag_(f)
+	    , data_(reinterpret_cast<int16_t const*>(f.dataBegin()))
+	    , version_(isRaw() ? stm::RawHeader::headerVersion(data_, dataWords()) : 0)
+	    , legacy_(version_ == stm::RawHeader::VERSION_LEGACY)
 	{
 	}
 
@@ -27,68 +28,68 @@ public:
 
 	bool isRaw() const
 	{
-		switch (dataset())
+		switch(dataset())
 		{
-			case stm::Dataset::RAW_HPGE:
-			case stm::Dataset::RAW_LABR:
-				return true;
+		case stm::Dataset::RAW_HPGE:
+		case stm::Dataset::RAW_LABR:
+			return true;
 
-			default:
-				return false;
+		default:
+			return false;
 		}
 	}
 
 	bool isZS() const
 	{
-		switch (dataset())
+		switch(dataset())
 		{
-			case stm::Dataset::ZS_HPGE:
-			case stm::Dataset::ZS_LABR:
-				return true;
+		case stm::Dataset::ZS_HPGE:
+		case stm::Dataset::ZS_LABR:
+			return true;
 
-			default:
-				return false;
+		default:
+			return false;
 		}
 	}
 
 	bool isPH() const
 	{
-		switch (dataset())
+		switch(dataset())
 		{
-			case stm::Dataset::PH_HPGE:
-			case stm::Dataset::PH_LABR:
-				return true;
+		case stm::Dataset::PH_HPGE:
+		case stm::Dataset::PH_LABR:
+			return true;
 
-			default:
-				return false;
+		default:
+			return false;
 		}
 	}
 
 	bool isHPGe() const
 	{
-		switch (dataset())
+		switch(dataset())
 		{
-			case stm::Dataset::RAW_HPGE:
-			case stm::Dataset::ZS_HPGE:
-			case stm::Dataset::PH_HPGE:
-				return true;
+		case stm::Dataset::RAW_HPGE:
+		case stm::Dataset::ZS_HPGE:
+		case stm::Dataset::PH_HPGE:
+			return true;
 
-			default:
-				return false;
+		default:
+			return false;
 		}
 	}
 
 	bool isLaBr() const
 	{
-		switch (dataset())
+		switch(dataset())
 		{
-			case stm::Dataset::RAW_LABR:
-			case stm::Dataset::ZS_LABR:
-			case stm::Dataset::PH_LABR:
-				return true;
+		case stm::Dataset::RAW_LABR:
+		case stm::Dataset::ZS_LABR:
+		case stm::Dataset::PH_LABR:
+			return true;
 
-			default:
-				return false;
+		default:
+			return false;
 		}
 	}
 
@@ -114,9 +115,9 @@ public:
 
 	size_t headerWords() const
 	{
-		return isRaw()  ? (legacy_ ? stm::RawHeaderLegacy::WORDS : stm::RawHeader::WORDS)
-			   : isZS() ? stm::ZSHeader::WORDS
-						: 0;
+		return isRaw() ? (legacy_ ? stm::RawHeaderLegacy::WORDS : stm::RawHeader::WORDS)
+		     : isZS()  ? stm::ZSHeader::WORDS
+		               : 0;
 	}
 
 	// -----------------------
@@ -124,12 +125,12 @@ public:
 	// -----------------------
 	bool hasValidAnchors() const
 	{
-		if (!isRaw())
+		if(!isRaw())
 			return true;
-		if (dataWords() < headerWords())
+		if(dataWords() < headerWords())
 			return false;
 		return legacy_ ? stm::RawHeaderLegacy::hasValidAnchors(data_)
-					   : stm::RawHeader::hasValidAnchors(data_);
+		               : stm::RawHeader::hasValidAnchors(data_);
 	}
 
 	// -----------------------
@@ -142,20 +143,20 @@ public:
 	uint64_t eventWindowTag() const { return stm::RawHeader::eventWindowTag(data_); }
 	uint64_t adcClock() const { return stm::RawHeader::adcClock(data_); }
 	uint64_t dtcClock() const { return stm::RawHeader::dtcClock(data_); }
-	bool spillFlag() const { return stm::RawHeader::spillFlag(data_); }
-	bool subrunFlag() const { return stm::RawHeader::subrunFlag(data_); }
+	bool     spillFlag() const { return stm::RawHeader::spillFlag(data_); }
+	bool     subrunFlag() const { return stm::RawHeader::subrunFlag(data_); }
 	uint16_t rawLength() const { return stm::RawHeader::rawLength(data_); }
 	uint16_t zsRegions() const { return stm::RawHeader::zsRegions(data_); }
 	uint16_t zsLength() const { return stm::RawHeader::zsLength(data_); }
 	uint16_t phCount() const { return stm::RawHeader::phCount(data_); }
 
 	// Fields whose position or meaning differs between header versions.
-	bool rawPrescaled() const { return legacy_ ? stm::RawHeaderLegacy::rawPrescaled(data_) : stm::RawHeader::rawPrescaled(data_); }
-	bool zsPrescaled() const { return legacy_ ? stm::RawHeaderLegacy::zsPrescaled(data_) : stm::RawHeader::zsPrescaled(data_); }
-	uint8_t rawPrescaleValue() const { return legacy_ ? stm::RawHeaderLegacy::rawPrescaleValue(data_) : 0; }
-	uint8_t zsPrescaleValue() const { return legacy_ ? stm::RawHeaderLegacy::zsPrescaleValue(data_) : 0; }
-	bool badData() const { return legacy_ ? stm::RawHeaderLegacy::badData(data_) : stm::RawHeader::badData(data_); }
-	bool missing() const { return legacy_ ? stm::RawHeaderLegacy::missing(data_) : stm::RawHeader::missing(data_); }
+	bool     rawPrescaled() const { return legacy_ ? stm::RawHeaderLegacy::rawPrescaled(data_) : stm::RawHeader::rawPrescaled(data_); }
+	bool     zsPrescaled() const { return legacy_ ? stm::RawHeaderLegacy::zsPrescaled(data_) : stm::RawHeader::zsPrescaled(data_); }
+	uint8_t  rawPrescaleValue() const { return legacy_ ? stm::RawHeaderLegacy::rawPrescaleValue(data_) : 0; }
+	uint8_t  zsPrescaleValue() const { return legacy_ ? stm::RawHeaderLegacy::zsPrescaleValue(data_) : 0; }
+	bool     badData() const { return legacy_ ? stm::RawHeaderLegacy::badData(data_) : stm::RawHeader::badData(data_); }
+	bool     missing() const { return legacy_ ? stm::RawHeaderLegacy::missing(data_) : stm::RawHeader::missing(data_); }
 
 	// ----------------
 	// Full data (including header)
@@ -195,15 +196,15 @@ public:
 	size_t payloadWords() const
 	{
 		return isRaw()  ? rawLength()
-			   : isZS() ? zsPulseLength()
-						: frag_.dataSizeBytes() / sizeof(int16_t);
+		       : isZS() ? zsPulseLength()
+		                : frag_.dataSizeBytes() / sizeof(int16_t);
 	}
 
-private:
+  private:
 	artdaq::Fragment const& frag_;
-	int16_t const* data_;
-	uint16_t version_;
-	bool legacy_;
+	int16_t const*          data_;
+	uint16_t                version_;
+	bool                    legacy_;
 };
 
 }  // namespace mu2e
