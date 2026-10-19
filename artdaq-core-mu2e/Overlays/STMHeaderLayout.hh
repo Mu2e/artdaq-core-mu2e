@@ -63,7 +63,7 @@ struct RawHeader
 		EM_1       = 13,
 		EM_2_DRTDC = 14,
 
-		FLAGS      = 15, // bit0 badData, bit1 missing, bit2 rawPrescaled, bit3 zsPrescaled, bits12-15 version
+		FLAGS      = 15,  // bit0 badData, bit1 missing, bit2 rawPrescaled, bit3 zsPrescaled, bits12-15 version
 		RAW_LEN    = 16,
 		ZS_REGIONS = 17,
 		ZS_LEN     = 18,
@@ -165,8 +165,7 @@ struct RawHeader
 	static inline uint16_t headerVersion(int16_t const* d, size_t nWords);
 
 	// Compose a FLAGS word; used by emulators / writers.
-	static uint16_t makeFlags(bool badData, bool missing, bool rawPrescaled, bool zsPrescaled,
-	                          uint16_t version = CURRENT_VERSION)
+	static uint16_t makeFlags(bool badData, bool missing, bool rawPrescaled, bool zsPrescaled, uint16_t version = CURRENT_VERSION)
 	{
 		return uint16_t((badData ? 0x1 : 0) | (missing ? 0x2 : 0) |
 		                (rawPrescaled ? 0x4 : 0) | (zsPrescaled ? 0x8 : 0) |

@@ -115,9 +115,9 @@ class STMFragment
 
 	size_t headerWords() const
 	{
-		return isRaw() ? (legacy_ ? stm::RawHeaderLegacy::WORDS : stm::RawHeader::WORDS)
-		     : isZS()  ? stm::ZSHeader::WORDS
-		               : 0;
+		return isRaw()  ? (legacy_ ? stm::RawHeaderLegacy::WORDS : stm::RawHeader::WORDS)
+		       : isZS() ? stm::ZSHeader::WORDS
+		                : 0;
 	}
 
 	// -----------------------
