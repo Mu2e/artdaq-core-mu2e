@@ -13,6 +13,8 @@ class STMFragment
 	explicit STMFragment(artdaq::Fragment const& f)
 	    : frag_(f)
 	    , data_(reinterpret_cast<int16_t const*>(f.dataBegin()))
+	    , version_(isRaw() ? stm::RawHeader::headerVersion(data_, dataWords()) : 0)
+	    , legacy_(version_ == stm::RawHeader::VERSION_LEGACY)
 	{
 	}
 
@@ -102,13 +104,33 @@ class STMFragment
 	bool isPH_LaBr() const { return dataset() == stm::Dataset::PH_LABR; }
 
 	// -----------------------
+	// Header format
+	// -----------------------
+	// Header version of a RAW fragment, determined once at construction
+	uint16_t headerVersion() const { return version_; }
+
+	// True if this RAW fragment carries the legacy 22-word header.
+	// Always false for non-RAW datasets.
+	bool isLegacyHeader() const { return legacy_; }
+
+	size_t headerWords() const
+	{
+		return isRaw()  ? (legacy_ ? stm::RawHeaderLegacy::WORDS : stm::RawHeader::WORDS)
+		       : isZS() ? stm::ZSHeader::WORDS
+		                : 0;
+	}
+
+	// -----------------------
 	// Header integrity
 	// -----------------------
 	bool hasValidAnchors() const
 	{
 		if(!isRaw())
 			return true;
-		return stm::RawHeader::hasValidAnchors(data_);
+		if(dataWords() < headerWords())
+			return false;
+		return legacy_ ? stm::RawHeaderLegacy::hasValidAnchors(data_)
+		               : stm::RawHeader::hasValidAnchors(data_);
 	}
 
 	// -----------------------
@@ -124,15 +146,17 @@ class STMFragment
 	bool     spillFlag() const { return stm::RawHeader::spillFlag(data_); }
 	bool     subrunFlag() const { return stm::RawHeader::subrunFlag(data_); }
 	uint16_t rawLength() const { return stm::RawHeader::rawLength(data_); }
-	bool     rawPrescaled() const { return stm::RawHeader::rawPrescaled(data_); }
-	uint8_t  rawPrescaleValue() const { return 0; }
-	bool     zsPrescaled() const { return stm::RawHeader::zsPrescaled(data_); }
-	uint8_t  zsPrescaleValue() const { return 0; }
 	uint16_t zsRegions() const { return stm::RawHeader::zsRegions(data_); }
 	uint16_t zsLength() const { return stm::RawHeader::zsLength(data_); }
 	uint16_t phCount() const { return stm::RawHeader::phCount(data_); }
-	bool     badData() const { return stm::RawHeader::badData(data_); }
-	bool     missing() const { return stm::RawHeader::missing(data_); }
+
+	// Fields whose position or meaning differs between header versions.
+	bool    rawPrescaled() const { return legacy_ ? stm::RawHeaderLegacy::rawPrescaled(data_) : stm::RawHeader::rawPrescaled(data_); }
+	bool    zsPrescaled() const { return legacy_ ? stm::RawHeaderLegacy::zsPrescaled(data_) : stm::RawHeader::zsPrescaled(data_); }
+	uint8_t rawPrescaleValue() const { return legacy_ ? stm::RawHeaderLegacy::rawPrescaleValue(data_) : 0; }
+	uint8_t zsPrescaleValue() const { return legacy_ ? stm::RawHeaderLegacy::zsPrescaleValue(data_) : 0; }
+	bool    badData() const { return legacy_ ? stm::RawHeaderLegacy::badData(data_) : stm::RawHeader::badData(data_); }
+	bool    missing() const { return legacy_ ? stm::RawHeaderLegacy::missing(data_) : stm::RawHeader::missing(data_); }
 
 	// ----------------
 	// Full data (including header)
@@ -166,9 +190,7 @@ class STMFragment
 	// -----------------------
 	int16_t const* payloadBegin() const
 	{
-		return isRaw()  ? data_ + stm::RawHeader::WORDS
-		       : isZS() ? data_ + stm::ZSHeader::WORDS
-		                : data_;
+		return data_ + headerWords();
 	}
 
 	size_t payloadWords() const
@@ -181,6 +203,8 @@ class STMFragment
   private:
 	artdaq::Fragment const& frag_;
 	int16_t const*          data_;
+	uint16_t                version_;
+	bool                    legacy_;
 };
 
 }  // namespace mu2e
