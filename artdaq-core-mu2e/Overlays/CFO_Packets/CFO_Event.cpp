@@ -29,13 +29,13 @@ DTCLib::DTC_EventMode CFOLib::CFO_Event::GetEventMode() const
 	// initialisation (C++20) and fill only mode0 with the low byte, leaving mode4 (on-spill, subrun
 	// bits) and the delivery ring TDC at zero. Unpack the 48-bit record field byte by byte, same byte
 	// order as the heartbeat packet.
-	const uint64_t        eventModeBits = record_.event_mode;
+	const uint64_t eventModeBits = record_.event_mode;
 	DTCLib::DTC_EventMode eventMode;
-	eventMode.mode0           = static_cast<uint8_t>(eventModeBits & 0xFF);
-	eventMode.mode1           = static_cast<uint8_t>((eventModeBits >> 8) & 0xFF);
-	eventMode.mode2           = static_cast<uint8_t>((eventModeBits >> 16) & 0xFF);
-	eventMode.mode3           = static_cast<uint8_t>((eventModeBits >> 24) & 0xFF);
-	eventMode.mode4           = static_cast<uint8_t>((eventModeBits >> 32) & 0xFF);
+	eventMode.mode0 = static_cast<uint8_t>(eventModeBits & 0xFF);
+	eventMode.mode1 = static_cast<uint8_t>((eventModeBits >> 8) & 0xFF);
+	eventMode.mode2 = static_cast<uint8_t>((eventModeBits >> 16) & 0xFF);
+	eventMode.mode3 = static_cast<uint8_t>((eventModeBits >> 24) & 0xFF);
+	eventMode.mode4 = static_cast<uint8_t>((eventModeBits >> 32) & 0xFF);
 	eventMode.deliveryRingTDC = static_cast<uint8_t>((eventModeBits >> 40) & 0xFF);
 	return eventMode;
 }
