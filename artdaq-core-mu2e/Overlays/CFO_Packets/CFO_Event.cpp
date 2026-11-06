@@ -25,7 +25,19 @@ DTCLib::DTC_EventWindowTag CFOLib::CFO_Event::GetEventWindowTag() const
 
 DTCLib::DTC_EventMode CFOLib::CFO_Event::GetEventMode() const
 {
-	return DTCLib::DTC_EventMode(record_.event_mode);
+	// DTC_EventMode is an aggregate: DTC_EventMode(event_mode) would be parenthesized aggregate
+	// initialisation (C++20) and fill only mode0 with the low byte, leaving mode4 (on-spill, subrun
+	// bits) and the delivery ring TDC at zero. Unpack the 48-bit record field byte by byte, same byte
+	// order as the heartbeat packet.
+	const uint64_t eventModeBits = record_.event_mode;
+	DTCLib::DTC_EventMode eventMode;
+	eventMode.mode0 = static_cast<uint8_t>(eventModeBits & 0xFF);
+	eventMode.mode1 = static_cast<uint8_t>((eventModeBits >> 8) & 0xFF);
+	eventMode.mode2 = static_cast<uint8_t>((eventModeBits >> 16) & 0xFF);
+	eventMode.mode3 = static_cast<uint8_t>((eventModeBits >> 24) & 0xFF);
+	eventMode.mode4 = static_cast<uint8_t>((eventModeBits >> 32) & 0xFF);
+	eventMode.deliveryRingTDC = static_cast<uint8_t>((eventModeBits >> 40) & 0xFF);
+	return eventMode;
 }
 
 void CFOLib::CFO_Event::SetEventWindowTag(DTCLib::DTC_EventWindowTag const& tag)
@@ -40,6 +52,7 @@ void CFOLib::CFO_Event::SetEventMode(DTCLib::DTC_EventMode const& mode)
 	mode_word += (static_cast<uint64_t>(mode.mode2) << 16);
 	mode_word += (static_cast<uint64_t>(mode.mode3) << 24);
 	mode_word += (static_cast<uint64_t>(mode.mode4) << 32);
+	mode_word += (static_cast<uint64_t>(mode.deliveryRingTDC) << 40);  // bits [47:40], read back by GetEventMode()
 
 	record_.event_mode = mode_word;
 }
