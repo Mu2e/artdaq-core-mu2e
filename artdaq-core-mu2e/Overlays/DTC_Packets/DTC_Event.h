@@ -27,6 +27,13 @@ class DTC_Event
 
 	explicit DTC_Event(size_t data_size);
 
+	/// <summary>
+	/// Construct a DTC_Event that takes over a buffer the caller has already filled (event header
+	/// followed by the subevents). Nothing is copied and nothing is zeroed; call SetupEvent to finalize.
+	/// </summary>
+	/// <param name="filledEventBytes">The complete event bytes; the event keeps them alive</param>
+	explicit DTC_Event(std::shared_ptr<std::vector<uint8_t>> filledEventBytes);
+
 	DTC_Event()
 	    : header_()
 	    , sub_events_()

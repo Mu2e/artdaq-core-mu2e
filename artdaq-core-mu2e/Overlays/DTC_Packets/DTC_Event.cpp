@@ -23,6 +23,12 @@ DTCLib::DTC_Event::DTC_Event(size_t data_size)
 	TLOG(TLVL_CONSTRUCTOR) << "Empty DTC_Event created, copy in data and call SetupEvent to finalize";
 }
 
+DTCLib::DTC_Event::DTC_Event(std::shared_ptr<std::vector<uint8_t>> filledEventBytes)
+	: allocBytes(std::move(filledEventBytes)), header_(), sub_events_(), buffer_ptr_(allocBytes ? allocBytes->data() : nullptr)
+{
+	TLOG(TLVL_CONSTRUCTOR) << "DTC_Event created on an already filled buffer, call SetupEvent to finalize";
+}
+
 bool DTCLib::DTC_Event::SetupEvent()
 {
 	auto ptr = reinterpret_cast<const uint8_t*>(buffer_ptr_);
@@ -31,6 +37,9 @@ bool DTCLib::DTC_Event::SetupEvent()
 	ptr += sizeof(header_);
 
 	size_t byte_count = sizeof(header_);
+	// one allocation for the subevent list, so subevents are not moved while it grows
+	// (num_dtcs is 8 bits, so at most 255 entries)
+	sub_events_.reserve(header_.num_dtcs);
 	while (byte_count < header_.inclusive_event_byte_count)
 	{
 		TLOG(TLVL_SETUP) << "Current byte_count is " << byte_count << " / " << header_.inclusive_event_byte_count << ", creating sub event";
